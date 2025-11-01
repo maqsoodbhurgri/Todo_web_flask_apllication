@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title mb-3">Login</h3>
+        <form method="post">
+          {{ form.hidden_tag() }}
+          <div class="mb-3">{{ form.username.label }} {{ form.username(class_='form-control') }}</div>
+          <div class="mb-3">{{ form.password.label }} {{ form.password(class_='form-control') }}</div>
+          <div class="d-grid"><button class="btn btn-success">Login</button></div>
+        </form>
+        <hr>
+        <p class="small">Need an account? <a href="{{ url_for('register') }}">Register</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

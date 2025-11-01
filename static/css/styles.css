@@ -1,0 +1,15 @@
+body {
+  background: linear-gradient(120deg,#f8fafc,#eef2ff);
+}
+.card {
+  border-radius: .8rem;
+}
+.navbar-brand {
+  font-weight: 700;
+}
+.btn-outline-danger {
+  margin-left: .25rem;
+}
+.card-title {
+  font-weight: 600;
+}

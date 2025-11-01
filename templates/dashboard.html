@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Your Tasks</h2>
+  <div>
+    <a href="{{ url_for('add_task') }}" class="btn btn-primary">Add Task</a>
+  </div>
+</div>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-4">
+    <input name="q" value="{{ q }}" class="form-control" placeholder="Search tasks...">
+  </div>
+  <div class="col-md-3">
+    <select name="sort" class="form-select">
+      <option value="created_desc" {% if sort=='created_desc' %}selected{% endif %}>Newest</option>
+      <option value="due_asc" {% if sort=='due_asc' %}selected{% endif %}>Due date ↑</option>
+      <option value="due_desc" {% if sort=='due_desc' %}selected{% endif %}>Due date ↓</option>
+      <option value="title_asc" {% if sort=='title_asc' %}selected{% endif %}>Title A→Z</option>
+      <option value="title_desc" {% if sort=='title_desc' %}selected{% endif %}>Title Z→A</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <button class="btn btn-outline-secondary">Apply</button>
+  </div>
+</form>
+
+{% if tasks %}
+  <div class="row row-cols-1 row-cols-md-2 g-3">
+    {% for task in tasks %}
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <small class="text-muted">{{ task.category or '—' }}</small>
+          </div>
+          <p class="card-text">{{ task.description or '' }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <small class="text-muted">Due: {{ task.due_date or 'No date' }}</small>
+            </div>
+            <div>
+              <form style="display:inline" method="post" action="{{ url_for('toggle_task', task_id=task.id) }}">
+                <button class="btn btn-sm {% if task.is_active %}btn-success{% else %}btn-danger{% endif %}">
+                  {% if task.is_active %}Active{% else %}Inactive{% endif %}
+                </button>
+              </form>
+              <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+              <form style="display:inline" method="post" action="{{ url_for('delete_task', task_id=task.id) }}" onsubmit="return confirmDelete();">
+                <button class="btn btn-sm btn-outline-danger">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="text-center mt-5">
+    <p class="lead">No tasks yet. Add one to get started.</p>
+    <a href="{{ url_for('add_task') }}" class="btn btn-lg btn-primary">Add Task</a>
+  </div>
+{% endif %}
+
+{% endblock %}
